@@ -1,3 +1,4 @@
+imgname=vuechat
 cname=vue-build
 cid=`docker ps -a | grep $cname | awk '{print $1}'`
 echo $cid
@@ -16,4 +17,10 @@ else
   echo "docker image $cname is found, start it";
   docker start $cname    
 fi
-docker logs $cname
+docker logs $cname |tail -n13 | grep error
+if [ $? = 1 ]; then 
+  echo "source build completed!"
+  docker build -t $imgname -f Dockerfile.deploy .
+else 
+  echo "source build error, stoped. "
+fi
