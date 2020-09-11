@@ -1,26 +1,42 @@
-imgname=vuechat
-cname=vue-build
-cid=`docker ps -a | grep $cname | awk '{print $1}'`
-echo $cid
+# define variables
+builder_name="lqwangxg/vue-cli"
+app_name=vuechat
+builder_container_name=vue-build
 
+#check build images. if not found, create a new images
+echo "STEP1: CHECK BUILD IMAGE, IF NOT FOUND, CREATE A NEW ONE."
+vuecli=`docker images | grep "$builder_name"`
+if [ $? = 1 ]; then 
+  echo "source builder image is not found. create a new image..."
+  docker build -t $builder_name -f Dockerfile.builder .
+else
+  echo "found build image,next. "
+fi
+
+echo "STEP2: CHECK BUILD CONTAINER, IF NOT FOUND, START A NEW ONE."
+# check build container. if not found start a new
+cid=`docker ps -a | grep $builder_container_name | awk '{print $1}'`
 if [ -z "$cid" ]; then 
-  echo "docker container $cname is not found, start a new container.";
+  echo "docker container $builder_container_name is not found, start a new container.";
   
-  docker run -it --name $cname \
+  docker run -it --name $builder_container_name \
   -w /vuechat \
   -v ~/vuechat:/vuechat \
   lqwangxg/vue-cli \
   npm install -g @vue/cli @vue/cli-service-global \
-  npm run build 
+  && npm run build 
   
 else 
-  echo "docker image $cname is found, start it";
-  docker start $cname    
+  echo "docker container $builder_container_name is found, start it";
+  docker start $builder_container_name    
 fi
-docker logs $cname |tail -n13 | grep error
+
+echo "STEP3: CHECK SOURCE BUILD RESULT, IF NO ERROR, BUILD DOCKER DEPLOY IMAGE."
+#check build log. if succeed, docker build deploy images
+docker logs $builder_container_name |tail -n13 | grep error
 if [ $? = 1 ]; then 
-  echo "source build completed!"
-  docker build -t $imgname -f Dockerfile.deploy .
+  echo "source build succeeded!"
+  docker build -t $app_name -f Dockerfile.deploy .
 else 
   echo "source build error, stoped. "
 fi

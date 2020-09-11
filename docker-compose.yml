@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  webapp:
+    build:
+     context: .
+     args:
+       APPNAME: vuechat
+       PORT: 8080
