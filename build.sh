@@ -23,7 +23,7 @@ if [ -z "$cid" ]; then
   -w /vuechat \
   -v ~/vuechat:/vuechat \
   lqwangxg/vue-cli \
-  npm install -g @vue/cli @vue/cli-service-global \
+  npm install \
   && npm run build 
   
 else 
