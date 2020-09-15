@@ -3,16 +3,16 @@
 </template>
 
 <script lang="ts">
-    import {Component, Emit, Prop, Vue} from "vue-property-decorator";
+import { Vue } from 'vue-class-component';
+import {Emit, Prop} from 'vue-property-decorator';
 
-    @Component
     export default class HelloButton extends Vue{
       @Prop()
-      public greet?:string;
+      public greet?: string;
 
       @Emit()
       public click(){
-        console.log("HelloButton clicked from parent to child by $emit. ");
+        //console.log("HelloButton clicked from parent to child by $emit. ");
       }
 
       public onClick(){

@@ -26,10 +26,7 @@ if [ -z "$cid" ]; then
     $builder_name \
     npm run build 
   else
-    docker run -it --rm --name $builder_container_name \
-    -v ~/$app_name:/app \
-    $builder_name \
-    npm install && npm run build
+    docker build -t lqwangxg/vuechat -f Dockerfile.package
   fi
 else 
   echo "docker container $builder_container_name is found, start it";
