@@ -1,37 +1,26 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <input v-model="msg" />
+    <h2> message is :{{text}} </h2>
+    <input v-mode="text" @change="changed"  placeholder="input here" />
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { Vue } from 'vue-class-component';
+import { Emit, Prop, Watch } from 'vue-property-decorator';
 
-@Options({
-  props: {
-    msg: String
-  }
-})
 export default class HelloWorld extends Vue {
-  msg!: string
+  @Prop() 
+  private message = "";
+  private text = "";
+
+  @Emit("update:message")
+  private changed(){
+    return this.text;
+  }
+  @Watch("message")
+  onchanged() {
+    this.text = this.message;  
+  }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
