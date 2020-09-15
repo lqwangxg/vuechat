@@ -3,19 +3,15 @@
 </template>
 
 <script lang="ts">
-    import {Options, Vue} from "vue-class-component";
-
-    @Options({
-      props: {
-        greet: String
-      }
-    })
+    import {Component, Emit, Prop, Vue} from "vue-property-decorator";
 
     @Component
     export default class HelloButton extends Vue{
-      
+      @Prop()
+      public greet?:string;
+
+      @Emit()
       public click(){
-        this.$emit("click", this.greet);
         console.log("HelloButton clicked from parent to child by $emit. ");
       }
 
