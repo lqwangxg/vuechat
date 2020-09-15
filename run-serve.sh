@@ -11,11 +11,17 @@ fi
 cid=`docker ps -a | grep $builder_container_name | awk '{print $1}'`
 if [ -z "$cid" ]; then 
   echo "docker ps [$builder_container_name] is not found, run...";
-  docker run -it --name $builder_container_name \
-  -v ~/vuechat:/vuechat \
-  -dp 8080:8080 \
+  docker run -it --rm  --name $builder_container_name \
+  -v ~/vuechat:/app \
+  $builder_name \
+  npm install 
+
+  docker run -it --rm --name $builder_container_name \
+  -v ~/vuechat:/app \
+  -p 8080:8080 \
   $builder_name \
   npm run serve
+
 else 
   echo "docker ps [$builder_container_name] is found, start ";
   docker start [$builder_cotainer_name]
