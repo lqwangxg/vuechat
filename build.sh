@@ -8,7 +8,7 @@ echo "STEP1: CHECK BUILD IMAGE, IF NOT FOUND, CREATE A NEW ONE."
 vuecli=`docker images | grep "$builder_name"`
 if [ $? = 1 ]; then 
   echo "source builder image is not found. create a new image..."
-  docker build -t $builder_name -f Dockerfile.builder .
+  docker build -t $builder_name -f Dockerfile.builder .  
 else
   echo "found build image,next. "
 fi
@@ -19,13 +19,18 @@ cid=`docker ps -a | grep $builder_container_name | awk '{print $1}'`
 if [ -z "$cid" ]; then 
   echo "docker container $builder_container_name is not found, start a new container.";
   
-  docker run -it --name $builder_container_name \
-  -w /vuechat \
-  -v ~/vuechat:/vuechat \
-  lqwangxg/vue-cli \
-  npm install \
-  && npm run build 
-  
+  folderpath=node_modules
+  if [-d ${folderpath}]; then  
+    docker run -it --rm --name $builder_container_name \
+    -v ~/$app_name:/app \
+    $builder_name \
+    npm run build 
+  else
+    docker run -it --rm --name $builder_container_name \
+    -v ~/$app_name:/app \
+    $builder_name \
+    npm install && npm run build
+  fi
 else 
   echo "docker container $builder_container_name is found, start it";
   docker start $builder_container_name    
