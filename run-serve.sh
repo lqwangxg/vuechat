@@ -12,7 +12,7 @@ cid=`docker ps -a | grep $builder_container_name | awk '{print $1}'`
 if [ -z "$cid" ]; then 
   echo "docker ps [$builder_container_name] is not found, run...";
   #if node_modules not found, npm install first.
-  npminstalled = `ls | grep node_modules`;
+  ls | grep node_modules
   if [ $? = 1 ]; then 
     docker run -it --rm  --name $builder_container_name \
     -v ~/vuechat:/app \
