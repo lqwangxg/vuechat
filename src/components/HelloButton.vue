@@ -1,5 +1,6 @@
 <template>
     <button @click="onClick">Hello Button</button>
+    <el-button @click="onElClick" type="primary">Element Button </el-button>
 </template>
 
 <script lang="ts">
@@ -18,6 +19,9 @@ import {Emit, Prop} from 'vue-property-decorator';
 
       public onClick(){
         alert(this.greet);
+      }
+      private onElClick(){
+        alert(this.greet + " from el-button.");
       }
     }
 </script>
