@@ -19,15 +19,20 @@ cid=`docker ps -a | grep $builder_container_name | awk '{print $1}'`
 if [ -z "$cid" ]; then 
   echo "docker container $builder_container_name is not found, start a new container.";
   
-  folderpath=node_modules
-  if [-d ${folderpath}]; then  
+  ls | grep node_modules
+  if [ $? = 1 ]; then  
+    echo "not found node_modules, npm install first."
     docker run -it --rm --name $builder_container_name \
     -v ~/$app_name:/app \
     $builder_name \
-    npm run build 
-  else
-    docker build -t lqwangxg/vuechat -f Dockerfile.package
+    npm install 
   fi
+  echo "npm run build start..."
+  docker run -it --rm --name $builder_container_name \
+    -v ~/$app_name:/app \
+    $builder_name \
+    npm run build
+  echo "npm run build completed."
 else 
   echo "docker container $builder_container_name is found, start it";
   docker start $builder_container_name    
