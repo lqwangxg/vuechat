@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld v-model:message="greetText"/>
+    <HelloWorld v-model:message="greetText" @changed="messageChanged"/>
     <HelloButton :greet="greetText" @click="onHelloButtonClicked" ></HelloButton>
   </div>
 </template>
@@ -21,6 +21,9 @@ export default class Home extends Vue {
   private greetText = "hello, before button clicked.";
   public onHelloButtonClicked(){
     this.greetText = "goodbye, after button clicked.";
+  }
+  private messageChanged(newValue: string){
+    this.greetText = newValue;
   }
 }
 </script>
