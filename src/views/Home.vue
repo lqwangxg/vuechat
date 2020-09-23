@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld v-model:message="greetText" @changed="messageChanged"/>
     <HelloButton :greet="greetText" @click="onHelloButtonClicked" ></HelloButton>
   </div>
