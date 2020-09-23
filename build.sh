@@ -50,9 +50,9 @@ echo "STEP3: CHECK SOURCE BUILD RESULT, IF NO ERROR, BUILD DOCKER DEPLOY IMAGE."
 #check build log. if succeed, docker build deploy images
 docker logs $container_name |tail -n13 | grep error
 if [ $? = 1 ]; then 
- appname=`echo "$appname" | awk -F / '{print $3 }'`
- echo "source build succeeded!. appname=$appname"
-  docker build -t $app_name -f Dockerfile.deploy .
+ tag_name=`echo "$app_name" | awk -F / '{print $3 }'`
+ echo "source build succeeded!. appname=$tag_name"
+ docker build -t $tag_name -f Dockerfile.deploy .
 else 
   echo "source build error, stoped. "
 fi
